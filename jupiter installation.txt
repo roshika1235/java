@@ -1,0 +1,10 @@
+check python version:
+*python --version
+create a virtual environment:
+*python -m venv Demo
+*cd Demo
+*Demo\Scripts\activate
+PRESS R
+* pip install jupyter
+*jupyter lab
+kernel opens.....

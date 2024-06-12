@@ -1,0 +1,297 @@
+1. creating a table :
+
+ create table s_details(roll_no INT,
+    -> name VARCHAR(255),
+    -> email VARCHAR(255),
+    -> ph_no BIGINT);
+
+2. inserting a values into table:
+
+ INSERT INTO s_details(roll_no,name,email,ph_no) VALUES(1235,'roshika','22wh1a1235@bvrithyderabad.edu.in',8331835922);
+
+3.sorting based on roll_no:
+
+SELECT * FROM s_details ORDER BY roll_no;
+
+4.DDL commands:
+i.CREATE- create table s_details(roll_no INT, name VARCHAR(255), email VARCHAR(255), ph_no BIGINT);
+
+ii.ALTER- ALTER table s_details ADD address VARCHAR(255);
+
+iii.DELETE-
+iv.DROP
+v.TRUCATE
+vi.RENAME
+
+5.DML commands:
+i.SELECT-SELECT * from s_details;
+ii.INSERT-INSERT INTO s_details(roll_no,name,email,ph_no,address) VALUES(1214,'deepu','22wh1a1214@bvrithyderabd.edu.in',7982356819,'sangareddy');
+
+iii.UPDATE- UPDATE s_details SET address ='hyderabad' WHERE address is NULL;
+
+iv.DELETE-DELETE from s_details WHERE roll_no=1214;
+
+6.AGGREGATE operations:
+i.COUNT-SELECT COUNT(*) FROM s_details;
+ii.SUM- SELECT SUM(salary) FROM s_details as sum_salary;
+iii.AVG-SELECT AVG(salary) FROM s_details as avg_salary;
+iv.MAX- SELECT MAX(salary) FROM s_details as max_salary;
+v.MIN- SELECT MIN(salary) FROM s_details as min_salary;
+vi.GROUP_CONCAT- SELECT GROUP_CONCAT(name) FROM s_details;
+vii.
+*each department:
+
+ SELECT department ,AVG(salary) as avg_salary
+    -> FROM s_details
+    -> GROUP BY department;
+
+
+The HAVING clause is used in conjunction with the GROUP BY clause to filter the groups based on a specified condition. It is similar to the WHERE clause, but it is applied after the GROUP BY operation has been performed.
+
+Here's an example:
+
+sql
+Copy
+SELECT department, COUNT(*) AS num_employees, AVG(salary) AS avg_salary
+FROM employees
+GROUP BY department
+HAVING COUNT(*) > 10;
+This query will return the department, number of employees, and average salary for each department that has more than 10 employees.
+
+Some other important points about aggregate operations:
+
+Nested Aggregate Functions: You can use aggregate functions inside other aggregate functions. For example, you can calculate the average of the maximum salaries for each department.
+
+
+sql
+Copy
+SELECT department, AVG(MAX(salary)) AS avg_max_salary
+FROM employees
+GROUP BY department;
+
+DISTINCT: The DISTINCT keyword can be used with aggregate functions to remove duplicate values before performing the calculation.
+
+
+sql
+Copy
+SELECT COUNT(DISTINCT customer_id) AS unique_customers
+FROM orders;
+FILTER: Some databases (e.g., PostgreSQL) support the FILTER clause, which allows you to apply a condition to the rows before the aggregate function is applied.
+
+
+sql
+Copy
+SELECT department, COUNT(*) FILTER (WHERE salary > 50000) AS num_high_earners
+FROM employees
+GROUP BY department;
+Ordering: You can use the ORDER BY clause to sort the results of an aggregate query.
+
+
+Copy
+SELECT department, AVG(salary) AS avg_salary
+FROM employees
+GROUP BY department
+ORDER BY avg_salary DESC; 
+
+
+
+NOT NULL: Ensures that a column cannot have a NULL value.
+sql
+Copy
+CREATE TABLE users (
+  id INT PRIMARY KEY,
+  name VARCHAR(50) NOT NULL,
+  email VARCHAR(50) NOT NULL
+);
+UNIQUE: Ensures that all values in a column (or a group of columns) are unique.
+sql
+Copy
+CREATE TABLE products (
+  id INT PRIMARY KEY,
+  name VARCHAR(50) UNIQUE,
+  price DECIMAL(10,2)
+);
+PRIMARY KEY: Uniquely identifies each row in a table. A table can have only one primary key, which cannot be NULL.
+sql
+Copy
+CREATE TABLE orders (
+  id INT PRIMARY KEY,
+  customer_id INT,
+  order_date DATE,
+  total DECIMAL(10,2)
+);
+FOREIGN KEY: Links two tables together by referencing the primary key of another table. This ensures referential integrity.
+sql
+Copy
+CREATE TABLE order_items (
+  id INT PRIMARY KEY,
+  order_id INT FOREIGN KEY REFERENCES orders(id),
+  product_id INT FOREIGN KEY REFERENCES products(id),
+  quantity INT
+);
+CHECK: Ensures that the value in a column meets a specified condition.
+sql
+Copy
+CREATE TABLE employees (
+  id INT PRIMARY KEY,
+  name VARCHAR(50) NOT NULL,
+  age INT CHECK (age >= 18 AND age <= 65),
+  salary DECIMAL(10,2) CHECK (salary > 0)
+);
+DEFAULT: Specifies a default value for a column if no value is provided during insertion.
+sql
+Copy
+CREATE TABLE users (
+  id INT PRIMARY KEY,
+  name VARCHAR(50) NOT NULL,
+  email VARCHAR(50) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+
+
+
+A. Find the names of sailors who have reserved boat 103.
+
+SELECT Sailors.name
+FROM Sailors
+INNER JOIN Reserves ON Sailors.sid = Reserves.sid
+WHERE Reserves.bid = 103;
+
+B. Find the names of sailors who have reserved a red boat.
+
+SELECT Sailors.name
+FROM Sailors
+INNER JOIN Reserves ON Sailors.sid = Reserves.sid
+WHERE Reserves.color = 'red';
+
+C. Find the names of sailors who have reserved at least one boat.
+
+SELECT Sailors.name
+FROM Sailors
+INNER JOIN Reserves ON Sailors.sid = Reserves.sid
+GROUP BY Sailors.name;
+
+
+6.
+A. Find the names of sailors who have reserved boat 103.
+
+SQL:
+SELECT Sailors.name
+FROM Sailors
+INNER JOIN Reserves ON Sailors.sid = Reserves.sid
+WHERE Reserves.bid = 103;
+
+B. Find the names of sailors who have reserved a red boat.
+
+SQL:
+SELECT Sailors.name
+FROM Sailors
+INNER JOIN Reserves ON Sailors.sid = Reserves.sid
+WHERE Reserves.color = 'red';
+
+C. Find the names of sailors who have reserved at least one boat.
+
+SQL:
+SELECT Sailors.name
+FROM Sailors
+INNER JOIN Reserves ON Sailors.sid = Reserves.sid
+GROUP BY Sailors.name;
+
+D. Find the names of sailors who have reserved a red or a green boat.
+
+SQL:
+SELECT Sailors.name
+FROM Sailors
+INNER JOIN Reserves ON Sailors.sid = Reserves.sid
+WHERE Reserves.color IN ('red', 'green')
+GROUP BY Sailors.name;
+
+E. Find the names of sailors who have reserved a red and a green boat.
+
+SQL:
+SELECT Sailors.name
+FROM Sailors
+INNER JOIN Reserves ON Sailors.sid = Reserves.sid
+WHERE Reserves.color IN ('red', 'green')
+GROUP BY Sailors.name
+HAVING COUNT(DISTINCT Reserves.color) = 2;
+
+Relational Algebra:
+A. σbid=103(Sailors × Reserves)
+B. σcolor='red'(Sailors × Reserves)
+C. πname(Sailors × Reserves)
+D. σcolor in ('red', 'green')(Sailors × Reserves)
+E. πname(σcolor in ('red', 'green')(Sailors × Reserves) ∧ COUNT(DISTINCT color) = 2)
+
+Part 7:
+
+A. Find the names of sailors who have reserved boat 103.
+
+Tuple Relational Calculus:
+{t.name | ∃r(Reserves(r) ∧ r.bid = 103 ∧ r.sid = t.sid ∧ Sailors(t))}
+
+SQL:
+SELECT Sailors.name
+FROM Sailors
+INNER JOIN Reserves ON Sailors.sid = Reserves.sid
+WHERE Reserves.bid = 103;
+
+B. Find the names of sailors who have reserved a red boat.
+
+Tuple Relational Calculus:
+{t.name | ∃r(Reserves(r) ∧ r.color = 'red' ∧ r.sid = t.sid ∧ Sailors(t))}
+
+SQL:
+SELECT Sailors.name
+FROM Sailors
+INNER JOIN Reserves ON Sailors.sid = Reserves.sid
+WHERE Reserves.color = 'red';
+
+C. Find the names of sailors who have reserved at least one boat.
+
+Tuple Relational Calculus:
+{t.name | ∃r(Reserves(r) ∧ r.sid = t.sid ∧ Sailors(t))}
+
+SQL:
+SELECT Sailors.name
+FROM Sailors
+INNER JOIN Reserves ON Sailors.sid = Reserves.sid
+GROUP BY Sailors.name;
+
+Part 8:
+
+A. Find the names of sailors who have reserved boat 103.
+
+Tuple Relational Calculus:
+{t.name | ∃r(Reserves(r) ∧ r.bid = 103 ∧ r.sid = t.sid ∧ Sailors(t))}
+
+SQL:
+SELECT Sailors.name
+FROM Sailors
+INNER JOIN Reserves ON Sailors.sid = Reserves.sid
+WHERE Reserves.bid = 103;
+
+B. Find the names of sailors who have reserved a red boat.
+
+Tuple Relational Calculus:
+{t.name | ∃r(Reserves(r) ∧ r.color = 'red' ∧ r.sid = t.sid ∧ Sailors(t))}
+
+SQL:
+SELECT Sailors.name
+FROM Sailors
+INNER JOIN Reserves ON Sailors.sid = Reserves.sid
+WHERE Reserves.color = 'red';
+
+C. Find the names of sailors who have reserved at least one boat.
+
+Tuple Relational Calculus:
+{t.name | ∃r(Reserves(r) ∧ r.sid = t.sid ∧ Sailors(t))}
+
+SQL:
+SELECT Sailors.name
+FROM Sailors
+INNER JOIN Reserves ON Sailors.sid = Reserves.sid
+GROUP BY Sailors.name;
+
